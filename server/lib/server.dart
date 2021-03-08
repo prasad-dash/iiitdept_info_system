@@ -75,9 +75,9 @@ void start() async {
   serv.get('/login', [
     (ServRequest req, ServResponse res) async {
       print('InLogin');
-      var user = await users.findOne(where.eq('userId', req.body['login']));
+      var user = await users.findOne(where.eq('userId', req.query['login']));
       if (user != null) {
-        if (user['password'] == req.body['password']) {
+        if (user['password'] == req.query['password']) {
           return res.status(200).json({'verified': 'Yes'});
         }
       } else {
@@ -91,28 +91,28 @@ void start() async {
     (ServRequest req, ServResponse res) async {
       print('Insearch');
       if (req.params['type'] == 'prof') {
-        var user = await prof.findOne(where.eq('name', req.body['name']));
+        var user = await prof.findOne(where.eq('name', req.query['name']));
         if (user != null) {
           return res.status(200).json({'userdata': user, 'found': 'true'});
         } else {
           return res.status(200).json({'found': 'false'});
         }
       } else if (req.params['type'] == 'Aprof') {
-        var user = await Aprof.findOne(where.eq('name', req.body['name']));
+        var user = await Aprof.findOne(where.eq('name', req.query['name']));
         if (user != null) {
           return res.status(200).json({'userdata': user});
         } else {
           return res.status(200).json({'found': 'false'});
         }
       } else if (req.params['type'] == 'phd') {
-        var user = await phd.findOne(where.eq('name', req.body['name']));
+        var user = await phd.findOne(where.eq('name', req.query['name']));
         if (user != null) {
           return res.status(200).json({'userdata': user});
         } else {
           return res.status(200).json({'found': 'false'});
         }
       } else if (req.params['type'] == 'resources') {
-        var user = await resources.findOne(where.eq('id', req.body['id']));
+        var user = await resources.findOne(where.eq('id', req.query['id']));
         if (user != null) {
           return res.status(200).json({'userdata': user});
         } else {
@@ -126,11 +126,11 @@ void start() async {
   //SHOW DEPARTMENT PAGE
   serv.get('/department', [
     (ServRequest req, ServResponse res) async {
-      var profList = prof.find(where.eq('dept', req.body['dept'])).toList();
-      var AprofList = Aprof.find(where.eq('dept', req.body['dept'])).toList();
-      var phdList = phd.find(where.eq('dept', req.body['dept'])).toList();
+      var profList = prof.find(where.eq('dept', req.query['dept'])).toList();
+      var AprofList = Aprof.find(where.eq('dept', req.query['dept'])).toList();
+      var phdList = phd.find(where.eq('dept', req.query['dept'])).toList();
       var resourcesList =
-          resources.find(where.eq('dept', req.body['dept'])).toList();
+          resources.find(where.eq('dept', req.query['dept'])).toList();
       return res.status(200).json({
         'profList': profList,
         'ArofList': AprofList,
