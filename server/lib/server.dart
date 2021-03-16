@@ -1,8 +1,9 @@
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sevr/sevr.dart';
 
-void start() async {
-  final db = await Db.create('mongodb://127.0.0.1:27017/test');
+void main() async {
+  final db = await Db.create(
+      'mongodb+srv://prasad:prasad@cluster0.ayj3r.mongodb.net/apptest?retryWrites=true&w=majority');
   await db.open();
   print('DB OPENED');
   print('DB selected');
@@ -124,19 +125,29 @@ void start() async {
     }
   ]);
   //SHOW DEPARTMENT PAGE
-  serv.get('/department', [
+  serv.get('/department/:type', [
     (ServRequest req, ServResponse res) async {
-      var profList = prof.find(where.eq('dept', req.query['dept'])).toList();
+      /*  var profList = prof.find(where.eq('dept', req.query['dept']).and(where.eq())).toList();
       var AprofList = Aprof.find(where.eq('dept', req.query['dept'])).toList();
       var phdList = phd.find(where.eq('dept', req.query['dept'])).toList();
-      var resourcesList =
-          resources.find(where.eq('dept', req.query['dept'])).toList();
-      return res.status(200).json({
-        'profList': profList,
-        'ArofList': AprofList,
-        'phdList': phdList,
-        'resourcesList': resourcesList
-      });
+      var resourcesList =resources.find(where.eq('dept', req.query['dept'])).toList();
+      */
+      if (req.params['type'] == 'prof') {
+        var list =
+            await prof.find(where.eq('dept', req.query['dept'])).toList();
+        return res.status(200).json({'list': list});
+      } else if (req.params['type'] == 'Aprof') {
+        var list =
+            await Aprof.find(where.eq('dept', req.query['dept'])).toList();
+        return res.status(200).json({'list': list});
+      } else if (req.params['type'] == 'phd') {
+        var list = await phd.find(where.eq('dept', req.query['dept'])).toList();
+        return res.status(200).json({'list': list});
+      } else if (req.params['type'] == 'resources') {
+        var list =
+            await resources.find(where.eq('dept', req.query['dept'])).toList();
+        return res.status(200).json({'list': list});
+      }
     }
   ]);
   //SHOW PROF/APROF/PHD/RESOURCES PAGE

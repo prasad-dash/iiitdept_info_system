@@ -1,4 +1,4 @@
-# dept_info_system
+# iiitbh_dept_info_system
 
 A new Flutter project.
 
